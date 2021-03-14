@@ -88,10 +88,10 @@ function getIt(options, done) {
         console.log('playlists finished: ', playlistsFinished);
         if (mediaPlaylist) {
           console.log('shutting down');
-          process.exit();
+          done();
         } else if (playlistsFinished == masterPlaylist.mediaPlaylists.length) {
           console.log('shutting down');
-          process.exit();
+          done();
         }
         }, finishedDownloadingSegment);
 
@@ -121,7 +121,7 @@ function getIt(options, done) {
         rootUri = path.dirname(pl[i].uri);
         updateFunction = pl[i].update.bind(pl[i]);
         downloadFunction = pl[i].download.bind(pl[i]);
-        downloadFunction(rootUri, cwd, pl[i].bandwidth, function() {console.log('shutting down');process.exit();}, finishedDownloadingSegment);
+        downloadFunction(rootUri, cwd, pl[i].bandwidth, function() {console.log('shutting down');done();}, finishedDownloadingSegment);
         if (!pl[i].endList) {
           //Only set update if we haven't found an endlist
           updateInterval = setInterval(updateFunction, pl[i].targetDuration * 1000, rootUri);
